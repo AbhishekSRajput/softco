@@ -1,8 +1,9 @@
 import axios from 'axios';
 
-const API_URL = 'https://example.com/api';
-
-export const fetchUser = async (userId: string) => {
-  const response = await axios.get(`${API_URL}/users/${userId}`);
-  return response.data;
-};
+export const axiosInstance = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  timeout: 10000,
+});
