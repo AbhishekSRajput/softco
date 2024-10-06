@@ -10,7 +10,7 @@ interface AuthState {
 
 const initialState: AuthState = {
   user: null,
-  token: null,
+  token: localStorage.getItem('token') || null, 
   loading: false,
   error: null,
 };
@@ -18,12 +18,12 @@ const initialState: AuthState = {
 // Register user
 export const registerUser = createAsyncThunk(
   'auth/register',
-  async (userData: { username: string; password: string, email: string }, { rejectWithValue }) => {
+  async (userData: { username: string; password: string; email: string }, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post('auth/register', userData);
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data?.message || "User Registration failed.");
+      return rejectWithValue(error.response.data?.message || 'User Registration failed.');
     }
   }
 );
@@ -37,10 +37,28 @@ export const loginUser = createAsyncThunk(
       localStorage.setItem('token', response.data.token); // Store token
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data?.message || "Login failed.");
+      return rejectWithValue(error.response.data?.message || 'Login failed.');
     }
   }
 );
+
+// Check if token is valid and restore session
+export const checkAuth = createAsyncThunk('auth/checkAuth', async (_, { rejectWithValue }) => {
+  const token = localStorage.getItem('token');
+  if (!token) return rejectWithValue('No token found');
+
+  try {
+    const response = await axiosInstance.get('/auth/me', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    console.error('error', error)
+    return rejectWithValue('Token is invalid or expired');
+  }
+});
 
 const authSlice = createSlice({
   name: 'auth',
@@ -78,6 +96,19 @@ const authSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      .addCase(checkAuth.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(checkAuth.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+        state.token = localStorage.getItem('token');
+        state.loading = false;
+      })
+      .addCase(checkAuth.rejected, (state) => {
+        state.loading = false;
+        state.token = null;
+        localStorage.removeItem('token');
       });
   },
 });
