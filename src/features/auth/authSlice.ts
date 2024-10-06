@@ -18,12 +18,12 @@ const initialState: AuthState = {
 // Register user
 export const registerUser = createAsyncThunk(
   'auth/register',
-  async (userData: { username: string; password: string }, { rejectWithValue }) => {
+  async (userData: { username: string; password: string, email: string }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post('/api/auth/register', userData);
+      const response = await axiosInstance.post('auth/register', userData);
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response.data?.message || "User Registration failed.");
     }
   }
 );

@@ -1,9 +1,9 @@
-import Login from '@/features/auth/Login'
+import Login from '@/features/auth/LoginForm'
 
 const LoginPage = () => {
   return (
-    <div className="bg-red-500 h-screen w-screen flex justify-center items-center bg-[url('/public/mainBackground.svg')]">
-        <div className='py-2 px-11'>
+    <div className="h-screen w-screen flex justify-center items-center bg-[url('/public/mainBackground.svg')]">
+        <div className='px-2'>
           <Login/>
         </div>
     </div>
