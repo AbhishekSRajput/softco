@@ -1,20 +1,9 @@
-// src/components/ProtectedRoute.tsx
-import React from 'react';
-import { useAppSelector } from '../app/hooks';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
+import { useAppSelector } from '@/app/hooks';
 
-interface ProtectedRouteProps {
-  children: JSX.Element;
-}
-
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" />;
-  }
-
-  return children;
+const ProtectedRoute = () => {
+  const token = useAppSelector((state) => state.auth.token);
+  return token ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default ProtectedRoute;
