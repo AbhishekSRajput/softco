@@ -1,8 +1,9 @@
 
 const Estimates = () => {
-  return (
-    <div>Estimates</div>
-  )
-}
+	return (
+		<div className="h-56">
+		</div>
+	);
+};
 
-export default Estimates
+export default Estimates;

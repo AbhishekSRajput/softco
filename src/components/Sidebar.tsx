@@ -14,7 +14,7 @@ const Sidebar = ({ sidebarExpanded }: { sidebarExpanded: boolean }) => {
 		<aside
 			className={`${
 				sidebarExpanded ? "w-48 md:w-64" : "w-16 md:w-20"
-			} transition-all duration-200 ease-in-out`}
+			} transition-all duration-03 ease-in-out`}
 		>
 			<div className='flex h-full flex-col'>
 				<div className='flex h-16 items-center justify-center'>
@@ -60,16 +60,12 @@ const Sidebar = ({ sidebarExpanded }: { sidebarExpanded: boolean }) => {
 					/>
 				</nav>
 				<div className='p-4 border-r'>
-					<button className='flex w-full items-center justify-center md:justify-start rounded-lg px-2 py-2 hover:bg-primary hover:text-white transition-all duration-150 ease-out'>
-						<LogOut
-							className={`h-6 w-6 md:h-7 md:w-7 transition-all duration-150 ease-out`}
-						/>
+					<button className='flex w-full items-center justify-center md:justify-start rounded-lg px-2 py-2 hover:bg-primary hover:text-white transition-all duration-03 ease-in-out'>
+						<LogOut className={`h-6 w-6 md:h-7 md:w-7`} />
 
 						<span
-							className={`ml-3 transition-opacity duration-150 ease-out ${
-								sidebarExpanded
-									? "opacity-100"
-									: "opacity-0 hidden"
+							className={`ml-3 duration-03 ease-in-out ${
+								sidebarExpanded ? "" : "hidden"
 							}`}
 						>
 							Logout
@@ -107,18 +103,16 @@ const NavItem = ({
 			}`}
 		></div>
 		<div
-			className={`flex items-center h-10 w-full rounded-sm ${
+			className={`flex items-center h-10 w-full rounded-sm transition-all duration-03 ease-in-out ${
 				isActive
 					? "bg-primary text-white"
 					: "text-gray-600 hover:bg-primary hover:text-white dark:text-white"
-			} ${
-				sidebarExpanded ? "pl-2 justify-start" : "justify-center"
-			} transition-all duration-150 ease-out`}
+			} ${sidebarExpanded ? "pl-2 justify-start" : "justify-center"}`}
 		>
 			<div>{icon}</div>
 			<span
-				className={`ml-3 transition-all duration-200 ${
-					sidebarExpanded ? "opacity-100 w-auto" : "hidden"
+				className={`ml-3 ${
+					sidebarExpanded ? "w-auto" : "hidden"
 				}`}
 			>
 				{label}
