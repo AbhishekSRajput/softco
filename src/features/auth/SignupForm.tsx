@@ -9,12 +9,12 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { registerUser } from "@/features/auth/authSlice";
+import React, { useEffect, useState } from "react";
+import { checkAuth, registerUser } from "@/features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
-import { AppDispatch } from "@/app/store";
-import { useToast } from "@/hooks/use-toast"
+import { useToast } from "@/hooks/use-toast";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import Loading from "@/components/Loading";
 
 export const description =
 	"A sign-up form with email and password inside a card. There's an option to sign up with GitHub and a link to log in if you already have an account.";
@@ -24,30 +24,51 @@ const SignUpForm: React.FC = () => {
 	const [password, setPassword] = useState("");
 	const [email, setEmail] = useState("");
 	const [error, setError] = useState<null | string>(null);
-	const [loading, setLoading] = useState(false)
-	const dispatch = useDispatch<AppDispatch>();
+	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
-	const { toast } = useToast()
+	const { toast } = useToast();
+
+	const dispatch = useAppDispatch();
+
+	const {
+		user,
+		loading: loadingAPI,
+		token,
+	} = useAppSelector((state) => state.auth);
+
+	useEffect(() => {
+		dispatch(checkAuth());
+	}, [dispatch]);
+
+	useEffect(() => {
+		if (token && user) {
+			navigate("/dashboard");
+		}
+	}, [token, user, navigate]);
+
+	if (loadingAPI || loading) {
+		return <Loading />;
+	}
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		setLoading(true)
+		setLoading(true);
 		const result = await dispatch(
 			registerUser({ username, password, email })
 		);
 
 		if (registerUser.fulfilled.match(result)) {
 			console.log(result);
-			toast({description: result.payload.message})
+			toast({ description: result.payload.message });
 			setTimeout(() => {
 				navigate("/login");
-				setLoading(false)
+				setLoading(false);
 			}, 2000);
 		} else if (registerUser.rejected.match(result)) {
 			setError(result.payload as string);
 			setLoading(false);
-			if(result.payload){
-				toast({title: result.payload as string })
+			if (result.payload) {
+				toast({ title: result.payload as string });
 			}
 		}
 	};
@@ -90,7 +111,11 @@ const SignUpForm: React.FC = () => {
 							<Label htmlFor='password'>Password</Label>
 							<Link
 								to='/forgot-password'
-								className={`ml-auto inline-block text-sm underline ${loading ? 'bg-gray-400 cursor-not-allowed' : ''}`}
+								className={`ml-auto inline-block text-sm underline ${
+									loading
+										? "bg-gray-400 cursor-not-allowed"
+										: ""
+								}`}
 							>
 								Forgot password?
 							</Link>
@@ -103,7 +128,7 @@ const SignUpForm: React.FC = () => {
 							required
 						/>
 					</div>
-					{error && <p className="text-red-500 text-sm">{error}</p>}
+					{error && <p className='text-red-500 text-sm'>{error}</p>}
 					<div className='flex items-center'>
 						<input type='checkbox' id='rememberMe' required />
 						<label htmlFor='rememberMe' className='ml-2 text-sm'>
@@ -116,61 +141,18 @@ const SignUpForm: React.FC = () => {
 				</form>
 				<div className='mt-4 text-center text-sm'>
 					Already have an account?{" "}
-					<Link to='/login' className={`underline  ${loading ? 'bg-gray-400 cursor-not-allowed' : ''}`}>
+					<Link
+						to='/login'
+						className={`underline  ${
+							loading ? "bg-gray-400 cursor-not-allowed" : ""
+						}`}
+					>
 						Log in
 					</Link>
 				</div>
 			</CardContent>
-			
 		</Card>
 	);
 };
 
-
-
 export default SignUpForm;
-
-
-// import React, { useState } from 'react';
-// import { useDispatch } from 'react-redux';
-// import { registerUser } from '../features/auth/authSlice';
-// import { useNavigate } from 'react-router-dom';
-// import { AppDispatch } from '../app/store';
-
-// const Signup: React.FC = () => {
-//   const [username, setUsername] = useState('');
-//   const [password, setPassword] = useState('');
-//   const dispatch = useDispatch<AppDispatch>();
-//   const navigate = useNavigate();
-
-//   const handleSubmit = async (e: React.FormEvent) => {
-//     e.preventDefault();
-//     const result = await dispatch(registerUser({ username, password }));
-
-//     if (registerUser.fulfilled.match(result)) {
-//       navigate('/dashboard');
-//     }
-//   };
-
-//   return (
-//     <form onSubmit={handleSubmit}>
-//       <input
-//         type="text"
-//         placeholder="Username"
-//         value={username}
-//         onChange={(e) => setUsername(e.target.value)}
-//         required
-//       />
-//       <input
-//         type="password"
-//         placeholder="Password"
-//         value={password}
-//         onChange={(e) => setPassword(e.target.value)}
-//         required
-//       />
-//       <button type="submit">Sign Up</button>
-//     </form>
-//   );
-// };
-
-// export default Signup;

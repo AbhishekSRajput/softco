@@ -53,6 +53,7 @@ export const checkAuth = createAsyncThunk('auth/checkAuth', async (_, { rejectWi
         Authorization: `Bearer ${token}`,
       },
     });
+    console.log('response checkAuth', response)
     return response.data;
   } catch (error: any) {
     console.error('error', error)
@@ -101,7 +102,7 @@ const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(checkAuth.fulfilled, (state, action) => {
-        state.user = action.payload.user;
+        state.user = action.payload;
         state.token = localStorage.getItem('token');
         state.loading = false;
       })

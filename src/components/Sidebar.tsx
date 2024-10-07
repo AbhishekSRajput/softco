@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 
 const Sidebar = ({ sidebarExpanded }: { sidebarExpanded: boolean }) => {
 	const location = useLocation();
-	const [activeItem, setActiveItem] = useState("/");
+	const [activeItem, setActiveItem] = useState("/dashboard");
 
 	useEffect(() => {
 		setActiveItem(location.pathname);
@@ -23,7 +23,7 @@ const Sidebar = ({ sidebarExpanded }: { sidebarExpanded: boolean }) => {
 							sidebarExpanded ? "" : "hidden"
 						}`}
 					>
-						LOGO
+						LO<span className="text-primary">GO</span>
 					</span>
 					<span
 						className={`text-2xl font-bold ${
@@ -37,10 +37,10 @@ const Sidebar = ({ sidebarExpanded }: { sidebarExpanded: boolean }) => {
 					<NavItem
 						icon={<Home className='h-7 w-7' />}
 						label='Dashboard'
-						to='/'
-						isActive={activeItem === "/"}
+						to='/dashboard'
+						isActive={activeItem === "/dashboard"}
 						sidebarExpanded={sidebarExpanded}
-						onClick={() => setActiveItem("/")}
+						onClick={() => setActiveItem("/dashboard")}
 					/>
 					<NavItem
 						icon={<Grid3X3 className='h-7 w-7' />}
