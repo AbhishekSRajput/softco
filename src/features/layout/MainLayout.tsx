@@ -20,10 +20,12 @@ export default function Layout() {
         {/* Top navbar */}
         <Header handleSidebarExpanded={handleSidebarExpanded} sidebarExpanded={sidebarExpanded} />
         {/* Page content */}
-        <main className='flex-1 overflow-y-auto p-4 bg-red-400'>
+        <main className='flex-1 bg-[#f5f6fa] dark:bg-[#1b2431] overflow-y-auto'>
           <Outlet />
         </main>
       </div>
     </div>
   );
 }
+
+//1b2431
