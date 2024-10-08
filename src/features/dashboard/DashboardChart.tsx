@@ -16,7 +16,7 @@ import {
 	ChartTooltip,
 	ChartTooltipContent,
 } from "@/components/ui/chart";
-import { chartData } from "@/lib/constants/dashboard";
+import { chartData } from "./constants";
 
 export const description = "An interactive line chart";
 
@@ -31,7 +31,7 @@ const chartConfig = {
 	}
 } satisfies ChartConfig;
 
-export function Chart() {
+export default function DashboardChart() {
 	const [activeChart, setActiveChart] =
 		React.useState<keyof typeof chartConfig>("desktop");
 

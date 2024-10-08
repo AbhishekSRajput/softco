@@ -1,10 +1,19 @@
 import { DollarSign, Grid3X3, Home, LogOut } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { logout } from "@/features/auth/authSlice";
+import { useAppDispatch } from "@/app/hooks";
 
 const Sidebar = ({ sidebarExpanded }: { sidebarExpanded: boolean }) => {
 	const location = useLocation();
 	const [activeItem, setActiveItem] = useState("/dashboard");
+	const navigate = useNavigate();
+	const dispatch = useAppDispatch();
+
+	const handleLogout = () => {
+		dispatch(logout());
+		navigate("/login");
+	};
 
 	useEffect(() => {
 		setActiveItem(location.pathname);
@@ -60,7 +69,10 @@ const Sidebar = ({ sidebarExpanded }: { sidebarExpanded: boolean }) => {
 					/>
 				</nav>
 				<div className='p-4 border-r'>
-					<button className='flex w-full items-center justify-center md:justify-start rounded-lg px-2 py-2 hover:bg-primary hover:text-white transition-all duration-03 ease-in-out'>
+					<button
+						onClick={handleLogout}
+						className='flex w-full items-center justify-center md:justify-start rounded-lg px-2 py-2 hover:bg-primary hover:text-white transition-all duration-03 ease-in-out'
+					>
 						<LogOut className={`h-6 w-6 md:h-7 md:w-7`} />
 
 						<span
