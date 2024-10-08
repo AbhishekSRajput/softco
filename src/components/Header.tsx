@@ -10,7 +10,6 @@ const Header = ({
 	sidebarExpanded: boolean;
 }) => {
 	return (
-		<div>
 			<header className='flex flex-col border-b'>
 				<div className='flex h-16 items-center justify-between px-4'>
 					<div className='flex items-center space-x-4'>
@@ -62,7 +61,6 @@ const Header = ({
 					</div>
 				</div>
 			</header>
-		</div>
 	);
 };
 
